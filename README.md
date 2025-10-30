@@ -1,50 +1,247 @@
-# Fauna GraphQL Guestbook Starter
+# Connexins - Guestbook Application
 
-This Guestbook Single-Page Application (SPA) example shows you how to use [Fauna's GraphQL endpoint](https://docs.fauna.com/fauna/current/api/graphql/) in your Next.js project.
+A modern, serverless guestbook application built with Next.js and FaunaDB. This project demonstrates how to build a full-stack application with GraphQL, serverless functions, and static site generation.
 
-## Deploy your own
+## Features
 
-Deploy the example using [Vercel](https://vercel.com?utm_source=github&utm_medium=readme&utm_campaign=next-example):
+- 📝 **Create Guestbook Entries** - Visitors can sign the guestbook with their name and message
+- 🔄 **Real-time Updates** - Uses SWR for optimistic UI updates and automatic revalidation
+- 🎨 **Dark Mode Support** - Beautiful UI with Tailwind CSS and dark mode
+- ⚡ **Serverless Architecture** - Powered by Next.js API routes and FaunaDB
+- 🔒 **Secure** - Role-based access control with FaunaDB
+- 📱 **Responsive Design** - Works seamlessly on all devices
+- 🚀 **Static Site Generation** - Pre-renders pages at build time for optimal performance
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https://github.com/vercel/next.js/tree/canary/examples/with-fauna&project-name=fauna-nextjs-guestbook&repository-name=fauna-nextjs-guestbook&demo-title=Next.js%20Fauna%20Guestbook%20App&demo-description=A%20simple%20guestbook%20application%20built%20with%20Next.js%20and%20Fauna&integration-ids=oac_Erlbqm8Teb1y4WhioE3r2utY)
+## Tech Stack
 
-## Why Fauna
+- **Framework**: [Next.js](https://nextjs.org/) (latest)
+- **Database**: [FaunaDB](https://fauna.com/) with GraphQL
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/) v3
+- **State Management**: [SWR](https://swr.vercel.app/) for data fetching
+- **Date Formatting**: [date-fns](https://date-fns.org/)
+- **Language**: JavaScript (React)
 
-By importing a `.gql` or `.graphql` schema into Fauna ([see our sample schema file](./schema.gql)), Fauna will generate required Indexes and GraphQL resolvers for you -- hands free 👐 ([some limitations exist](https://docs.fauna.com/fauna/current/api/graphql/#limitations)).
+## Prerequisites
 
-## How to use
+Before you begin, ensure you have the following installed:
+- Node.js (v14 or higher)
+- Yarn or npm
+- A [FaunaDB](https://fauna.com/) account
 
-Execute [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) with [npm](https://docs.npmjs.com/cli/init), [Yarn](https://yarnpkg.com/lang/en/docs/cli/create/), or [pnpm](https://pnpm.io) to bootstrap the example:
+## Getting Started
 
-```
-npx create-next-app --example with-fauna with-fauna-app
-# or
-yarn create next-app --example with-fauna with-fauna-app
-# or
-pnpm create next-app --example with-fauna with-fauna-app
-```
-
-You can start with this template [using `create-next-app`](#using-create-next-app) or by [downloading the repository manually](#download-manually).
-
-To use a live Fauna database, create a database at [dashboard.fauna.com](https://dashboard.fauna.com/) and generate an admin token by going to the **Security** tab on the left and then click **New Key**. Give the new key a name and select the 'Admin' Role. Copy the token since the setup script will ask for it. Do not use it in the frontend, it has superpowers which you don't want to give to your users.
-
-### Setting Up Your Schema
-
-The Next.js and Fauna example includes a setup script (`npm run setup`). After providing your admin token, the script will:
-
-- **Import your GraphQL schema:** Fauna automatically sets up collections and indexes to support your queries. You can view these in your [project dashboard](https://dashboard.fauna.com/) under **GraphQL**.
-- **Create an index and function:** The script will create a GraphQL resolver that uses [User-defined functions](https://docs.fauna.com/fauna/current/api/graphql/functions?lang=javascript) based on a sorting index.
-- **Create a scoped token:** This token is for use on the client side. The admin key can be used on the server side.
-
-After the script completes, a `.env.local` [file](https://nextjs.org/docs/basic-features/environment-variables) will be created for you with the newly generated client token assigned to an Environment Variable.
-
-### Run locally
-
-Install packages, set up if needed, then run the development server:
+### 1. Clone the Repository
 
 ```bash
+git clone <repository-url>
+cd connexins
+```
+
+### 2. Install Dependencies
+
+```bash
+yarn install
+# or
 npm install
+```
+
+### 3. Set Up FaunaDB
+
+1. Create a new database in your [FaunaDB dashboard](https://dashboard.fauna.com/)
+2. Generate an admin key for your database:
+   - Go to Security → Keys
+   - Create a new key with the "Admin" role
+   - Save the secret key
+
+### 4. Configure Environment Variables
+
+Run the setup script to configure your database and create the necessary resources:
+
+```bash
+yarn setup
+# or
+npm run setup
+```
+
+The script will:
+- Prompt you for your FaunaDB admin key (or use `FAUNA_ADMIN_KEY` environment variable)
+- Import the GraphQL schema
+- Create the necessary indexes and functions
+- Set up role-based access control
+- Generate a `.env.local` file with your client secret
+
+Alternatively, you can manually create a `.env.local` file:
+
+```bash
+FAUNA_CLIENT_SECRET=your_fauna_client_secret_here
+```
+
+### 5. Run the Development Server
+
+```bash
+yarn dev
+# or
 npm run dev
 ```
 
-Your app should be up and running on [http://localhost:3000](http://localhost:3000)!
+Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
+
+## Project Structure
+
+```
+connexins/
+├── components/           # React components
+│   ├── ErrorMessage.js   # Error display component
+│   ├── LoadingSpinner.js # Loading indicator
+│   └── SuccessMessage.js # Success notification
+├── lib/                  # Utility libraries
+│   ├── constants.js      # Configuration constants
+│   └── fauna.js          # FaunaDB GraphQL client and queries
+├── pages/                # Next.js pages
+│   ├── index.js          # Main guestbook page
+│   └── api/              # API routes
+│       └── entries/      # Guestbook entries endpoints
+│           └── index.js  # GET and POST handlers
+├── public/               # Static assets
+│   └── static/           # Static files (favicon, etc.)
+├── scripts/              # Setup and utility scripts
+│   └── setup.js          # Database setup script
+├── schema.gql            # FaunaDB GraphQL schema
+├── tailwind.config.js    # Tailwind CSS configuration
+├── postcss.config.js     # PostCSS configuration
+└── package.json          # Project dependencies
+```
+
+## Database Schema
+
+The application uses a simple GraphQL schema defined in `schema.gql`:
+
+```graphql
+type GuestbookEntry {
+  name: String!
+  message: String!
+  createdAt: Time!
+}
+
+type Query {
+  entries: [GuestbookEntry!]
+    @resolver(name: "listLatestEntries", paginated: true)
+}
+```
+
+The setup script creates:
+- **Collection**: `GuestbookEntry` - Stores all guestbook entries
+- **Index**: `latestEntries` - Indexes entries by creation date (descending)
+- **Function**: `listLatestEntries` - Custom resolver for paginated queries
+- **Role**: `GuestbookRole` - Defines read/write permissions
+- **Key**: Client secret with limited permissions
+
+## API Endpoints
+
+### GET `/api/entries`
+Retrieves all guestbook entries, sorted by creation date (newest first).
+
+**Response:**
+```json
+[
+  {
+    "_id": "123456789",
+    "_ts": 1234567890,
+    "name": "John Doe",
+    "message": "Great guestbook!",
+    "createdAt": "2025-10-29T12:00:00Z"
+  }
+]
+```
+
+### POST `/api/entries`
+Creates a new guestbook entry.
+
+**Request Body:**
+```json
+{
+  "name": "John Doe",
+  "message": "Hello, world!"
+}
+```
+
+**Response:**
+```json
+{
+  "_id": "123456789",
+  "_ts": 1234567890,
+  "name": "John Doe",
+  "message": "Hello, world!",
+  "createdAt": "2025-10-29T12:00:00Z"
+}
+```
+
+## Build and Deployment
+
+### Build for Production
+
+```bash
+yarn build
+# or
+npm run build
+```
+
+This command will:
+1. Run the setup script (if not already configured)
+2. Build the Next.js application
+3. Generate static pages
+
+### Start Production Server
+
+```bash
+yarn start
+# or
+npm start
+```
+
+### Deploy to Vercel
+
+This project is optimized for deployment on [Vercel](https://vercel.com):
+
+1. Push your code to GitHub
+2. Import your repository on Vercel
+3. Add the `FAUNA_ADMIN_KEY` environment variable in your Vercel project settings
+4. Deploy!
+
+The setup script will automatically run during the build process on Vercel.
+
+## Development
+
+### Key Features Implementation
+
+- **Optimistic Updates**: The application uses SWR's `mutate` function to immediately update the UI after submitting an entry
+- **Error Handling**: Comprehensive error states with user-friendly messages
+- **Loading States**: Visual feedback during data fetching and form submission
+- **Static Generation**: Uses `getStaticProps` to pre-render the page with initial data
+- **Form Validation**: Required fields with HTML5 validation
+
+### Customization
+
+- **Styling**: Modify `tailwind.config.js` to customize the theme
+- **Page Limit**: Change the `size` parameter in `lib/fauna.js` to adjust the number of entries displayed
+- **Date Format**: Update the format string in `pages/index.js` to change date display
+
+## Troubleshooting
+
+### "Invalid database secret" error
+- Ensure your FaunaDB admin key is correct
+- Check that you're using the right key for the correct database
+
+### Setup script fails
+- Make sure you have the necessary permissions in FaunaDB
+- Verify that the schema file (`schema.gql`) exists and is valid
+- Try creating a fresh database and running the setup again
+
+### API routes return 500 errors
+- Check that your `.env.local` file exists and contains the correct `FAUNA_CLIENT_SECRET`
+- Verify that the database resources were created successfully
+- Review the FaunaDB dashboard for any error logs
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
